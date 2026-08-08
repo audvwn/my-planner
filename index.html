@@ -431,7 +431,7 @@ input.field:focus,textarea.field:focus,select.field:focus,.input-row input:focus
 
 .confirm-emoji{font-size:2rem;margin-bottom:.4rem;}
 .confirm-msg{font-size:.92rem;color:var(--text);margin-bottom:1.2rem;line-height:1.5;}
-.confirm-actions{display:flex;gap:10px;justify-content:center;}
+.confirm-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
 
 /* Mobile */
 @media(max-width:620px){
@@ -459,7 +459,7 @@ input.field:focus,textarea.field:focus,select.field:focus,.input-row input:focus
 .nb-add-card-label{font-size:.75rem;font-weight:700;color:var(--pink-text);}
 .nb-back-btn{background:none;border:none;cursor:pointer;color:var(--pink-text);font-size:.82rem;font-weight:700;font-family:'Nunito',sans-serif;padding:0;margin-bottom:10px;display:flex;align-items:center;gap:4px;}
 .nb-back-btn:hover{text-decoration:underline;}
-.nb-header{display:flex;align-items:center;gap:12px;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem;position:relative;background:transparent;}
+.nb-header{display:flex;flex-wrap:wrap;align-items:center;gap:12px;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem;position:relative;background:transparent;}
 .nb-header-icon{font-size:2.5rem;}
 .nb-header-info{flex:1;}
 .nb-header-title{font-size:1.1rem;font-weight:700;color:#fff;}
@@ -1017,7 +1017,7 @@ html.dark-mode .canvas-wrap {
           </div>
           <!-- Note editor view -->
           <div id="nb-view-editor" style="display:none;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
               <button class="nb-back-btn" id="nbBackToList">← back to notes</button>
               <div style="display:flex;gap:8px;">
                 <button class="btn sm" id="saveNoteBtn">save</button>
@@ -2621,17 +2621,13 @@ noteBody.addEventListener('beforeinput',function(e){
   var sel=window.getSelection();if(!sel.rangeCount)return;
   var node=sel.anchorNode&&sel.anchorNode.nodeType===3?sel.anchorNode.parentElement:sel.anchorNode;
   var anchor=node&&node.closest?node.closest('[data-note-plain-caret],[data-note-highlight-caret]'):null;
-  if(!noteHighlightMode){
-    document.execCommand('hiliteColor',false,'transparent');
-    document.execCommand('backColor',false,'transparent');
-  }
   if(!anchor)return;
-    var text=anchor.firstChild;
-    if(text&&text.nodeType===3&&text.data.indexOf('\u200B')>=0){
-      text.data=text.data.replace(/\u200B/g,'');
-      var range=document.createRange();range.setStart(text,0);range.collapse(true);
-      sel.removeAllRanges();sel.addRange(range);
-    }
+  var text=anchor.firstChild;
+  if(text&&text.nodeType===3&&text.data.indexOf('\u200B')>=0){
+    text.data=text.data.replace(/\u200B/g,'');
+    var range=document.createRange();range.setStart(text,0);range.collapse(true);
+    sel.removeAllRanges();sel.addRange(range);
+  }
   anchor.removeAttribute('data-note-plain-caret');
   anchor.removeAttribute('data-note-highlight-caret');
 });
